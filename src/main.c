@@ -27,22 +27,8 @@
 
 // ----------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "diag/Trace.h"
+#include "main.h"
 
-// ----------------------------------------------------------------------------
-//
-// Standalone STM32F1 empty sample (trace via NONE).
-//
-// Trace support is enabled by adding the TRACE macro definition.
-// By default the trace messages are forwarded to the NONE output,
-// but can be rerouted to any device or completely suppressed, by
-// changing the definitions required in system/src/diag/trace_impl.c
-// (currently OS_USE_TRACE_ITM, OS_USE_TRACE_SEMIHOSTING_DEBUG/_STDOUT).
-//
-
-// ----- main() ---------------------------------------------------------------
 
 // Sample pragmas to cope with warnings. Please note the related line at
 // the end of this function, used to pop the compiler diagnostics status.
@@ -51,17 +37,26 @@
 #pragma GCC diagnostic ignored "-Wmissing-declarations"
 #pragma GCC diagnostic ignored "-Wreturn-type"
 
-int
-main(int argc, char* argv[])
+void Delay()
 {
-  // At this stage the system clock should have already been configured
-  // at high speed.
+	volatile uint32_t timer = 0xFFFFFF;
+	while (timer--);
+}
 
-  // Infinite loop
-  while (1)
-    {
-       // Add your code here.
-    }
+int main(int argc, char* argv[])
+{
+	RCC->APB2ENR |= RCC_APB2ENR_IOPCEN;
+
+	GPIOC->CRH &= ~(GPIO_CRH_MODE13_1 | GPIO_CRH_MODE13_0 | GPIO_CRH_CNF13_1 | GPIO_CRH_CNF13_0);
+	GPIOC->CRH |= (GPIO_CRH_MODE13_1 | GPIO_CRH_MODE13_0); // PC13 output
+
+	while(1)
+	{
+		GPIOC->ODR |= BV(13);
+		Delay();
+		GPIOC->ODR &= ~BV(13);
+		Delay();
+	}
 }
 
 #pragma GCC diagnostic pop
