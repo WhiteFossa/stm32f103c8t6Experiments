@@ -48,3 +48,22 @@ void SwitchClockToPLL(void)
 	RCC->CFGR = (RCC->CFGR & ~RCC_CFGR_SW) | RCC_CFGR_SW_PLL;
 	while ((RCC->CFGR & RCC_CFGR_SWS) != RCC_CFGR_SWS_PLL) {}; // Waiting for switching to PLL
 }
+
+void ActivateLSEClock(void)
+{
+	// Enabling power and backup domain interfaces clock
+	RCC->APB1ENR |= RCC_APB1ENR_PWREN | RCC_APB1ENR_BKPEN;
+
+	// Allowing write to backup domain
+	PWR->CR |= PWR_CR_DBP;
+
+	// Switching LSE on
+	RCC->BDCR |= RCC_BDCR_LSEON;
+	while (0x00 == (RCC->BDCR & RCC_BDCR_LSERDY)) {}; // Waiting for LSE startup
+
+	// Selecting LSE as RTC clock
+	RCC->BDCR = (RCC->BDCR & ~RCC_BDCR_RTCSEL) | RCC_BDCR_RTCSEL_LSE;
+
+	// Enabling clock
+	RCC->BDCR |= RCC_BDCR_RTCEN;
+}

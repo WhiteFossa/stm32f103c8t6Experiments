@@ -48,6 +48,7 @@ int main(int argc, char* argv[])
 	// Hardware initialization
 	SwitchClockToHSE();
 	SwitchClockToPLL();
+	ActivateLSEClock();
 
 	RCC->APB2ENR |= RCC_APB2ENR_IOPCEN;
 

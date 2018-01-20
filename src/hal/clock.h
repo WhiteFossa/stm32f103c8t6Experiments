@@ -27,4 +27,9 @@ void SwitchClockToHSE(void);
  */
 void SwitchClockToPLL(void);
 
+/**
+ * Clocking RTC from LSE clock.
+ */
+void ActivateLSEClock(void);
+
 #endif /* HAL_CLOCK_H_ */
