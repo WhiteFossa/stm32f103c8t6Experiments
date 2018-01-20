@@ -13,10 +13,11 @@
 #include "diag/Trace.h"
 #include "stm32f10x.h"
 #include "helpers/stm32_macroses.h"
+#include "hal/clock.h"
 
 int main(int argc, char* argv[]);
 
-void Delay();
+void Delay(void);
 
 
 #endif /* MAIN_H_ */

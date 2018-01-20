@@ -37,14 +37,18 @@
 #pragma GCC diagnostic ignored "-Wmissing-declarations"
 #pragma GCC diagnostic ignored "-Wreturn-type"
 
-void Delay()
+void Delay(void)
 {
-	volatile uint32_t timer = 0xFFFFFF;
+	volatile uint32_t timer = 0xFFFFF;
 	while (timer--);
 }
 
 int main(int argc, char* argv[])
 {
+	// Hardware initialization
+	SwitchClockToHSE();
+	SwitchClockToPLL();
+
 	RCC->APB2ENR |= RCC_APB2ENR_IOPCEN;
 
 	GPIOC->CRH &= ~(GPIO_CRH_MODE13_1 | GPIO_CRH_MODE13_0 | GPIO_CRH_CNF13_1 | GPIO_CRH_CNF13_0);
