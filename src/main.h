@@ -17,7 +17,10 @@
 
 int main(int argc, char* argv[]);
 
-void Delay(void);
+/**
+ * Changes led state.
+ */
+void ToggleLed(void);
 
 
 #endif /* MAIN_H_ */
